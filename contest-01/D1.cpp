@@ -75,25 +75,47 @@ struct edge {
     ll w;
 };
 
+struct vertex {
+    int v;
+    ll w;
+};
+
 signed main() {
     fast_io
 
     int n, m;
     cin >> n >> m;
-    vector<edge> eds(m);
-    for (auto &el : eds) {
-        cin >> el.f >> el.t >> el.w;
-        --el.f, --el.t;
+    vector<vertex> ws(n);
+    for (int i = 0; i < n; ++i) {
+        ws[i].v = i;
+        cin >> ws[i].w;
+    }
+    sort(all(ws), [](const vertex &a, const vertex &b) -> bool {
+        return a.w < b.w;
+    });
+    vector<edge> eds(n - 1);
+    eds.reserve(n + m);
+    for (int i = 0 ; i < n - 1; ++i) {
+        eds[i].f = ws[0].v;
+        eds[i].t = ws[i + 1].v;
+        eds[i].w = ws[0].w + ws[i + 1].w;
+    }
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        ll c;
+        cin >> u >> v >> c;
+        --u, --v;
+        eds.push_back({u, v, c});
     }
     sort(all(eds), [](const edge &a, const edge &b) -> bool {
         return a.w < b.w;
     });
-    ll ans = 0;
     auto d = dsu(n);
-    for (auto &el : eds) {
-        if (d.root(el.f) != d.root(el.t)) {
-            d.unite(el.f, el.t);
-            ans += el.w;
+    ll ans = 0;
+    for (auto &&[f, t, w] : eds) {
+        if (d.root(f) != d.root(t)) {
+            ans += w;
+            d.unite(f, t);
         }
     }
     cout << ans << endl;

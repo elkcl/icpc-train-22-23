@@ -7,3 +7,6 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wfloat-equal -Wlogical-op -Wshift-
 add_executable(A1 contest-01/A1.cpp)
 add_executable(B1 contest-01/B1.cpp)
 add_executable(B1_final contest-01/B1_final.cpp)
+add_executable(D1 contest-01/D1.cpp)
+add_executable(A2 contest-02/A2.cpp)
+add_executable(C2 contest-02/C2.cpp)
