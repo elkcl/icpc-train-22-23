@@ -57,23 +57,20 @@ ostream& operator<<(ostream& s, const vector<T>& v) {
     return s;
 }
 
-void solve(vii &ans, vi &c, int l, int r) {
-    if (r - l == 1) {
-        c[l] = 0;
+void solve(vii &ans, int l, int r) {
+    if (r - l <= 1) {
         return;
     }
     if (r - l == 2) {
-        c[l] = 0;
-        c[l + 1] = 1;
-        ans.push_back({l, l + 1});
+        ans.emplace_back(l, l + 1);
         return;
     }
 
     int m = (l + r) / 2;
-    solve(ans, c, l, m);
-    solve(ans, c, m, r);
+    solve(ans, l, m);
+    solve(ans, m, r);
     for (int i = l, j = m; i < m; ++i, ++j)
-        ans.push_back({i, j});
+        ans.emplace_back(i, j);
 }
 
 signed main() {
@@ -83,9 +80,13 @@ signed main() {
     int n;
     cin >> n;
     vii ans;
-    vi c(n);
     ans.reserve(5e5);
-    solve(ans, c, 0, n);
+    int k = 1;
+    while (2 * k <= n)
+        k *= 2;
+    solve(ans, 0, k);
+    if (k != n)
+        solve(ans, n - k, n);
     cout << ans.size() << nl;
     for (auto&& [a, b] : ans)
         cout << a + 1 << ' ' << b + 1 << nl;
